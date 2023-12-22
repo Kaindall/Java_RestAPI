@@ -1,28 +1,18 @@
 package com.training.AngularSpring.model.response;
 
+import jakarta.validation.constraints.Email;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserResponseModel {
-    private String userId;
+    @NonNull private String userId;
     private String name;
-
-    public UserResponseModel(String userId, String name) {
-        this.userId = userId;
-        this.name = name;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    @Email(message = "Formatação de email invalida.")
+    private String email;
 }
 

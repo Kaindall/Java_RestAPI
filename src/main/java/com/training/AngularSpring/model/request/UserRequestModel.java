@@ -1,27 +1,18 @@
 package com.training.AngularSpring.model.request;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+import lombok.NonNull;
+
+
+@Data
 public class UserRequestModel {
-    private String id;
-    private String name;
+    private String userId;
+    @NonNull private String name;
+    @NonNull @Email(message = "Formatação de email invalida.")
+    private String email;
+    @NonNull @Size(min=6, message = "A senha precisa ter ao menos 6 caracteres.")
+    private String password;
 
-    public UserRequestModel(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
