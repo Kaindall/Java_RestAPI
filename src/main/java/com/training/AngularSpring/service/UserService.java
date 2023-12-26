@@ -1,21 +1,21 @@
 package com.training.AngularSpring.service;
 
-import com.training.AngularSpring.model.User;
-import com.training.AngularSpring.model.request.CreateUserRequestModel;
-import com.training.AngularSpring.model.request.UserRequestModel;
-import com.training.AngularSpring.model.response.UserResponseModel;
+import com.training.AngularSpring.model.request.CreateUserRequestModelDTO;
+import com.training.AngularSpring.model.request.UserRequestModelDTO;
+import com.training.AngularSpring.model.response.UserResponseModelDTO;
 
 import java.util.List;
 
 public interface UserService {
 
-    UserResponseModel getUser(int userId);
+    UserResponseModelDTO getUser(int userId);
 
-    List<UserResponseModel> getAllUsers();
+    List<UserResponseModelDTO> getAllUsers();
 
-    UserResponseModel createUser(CreateUserRequestModel user);
+    UserResponseModelDTO createUser(CreateUserRequestModelDTO user);
 
-    UserResponseModel editUser (UserRequestModel user);
 
-    boolean deleteUser (UserRequestModel user);
+    UserResponseModelDTO editUser (UserRequestModelDTO user);
+
+    boolean deleteUser (int user);
 }

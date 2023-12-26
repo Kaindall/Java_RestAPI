@@ -2,9 +2,9 @@ package com.training.AngularSpring.service.impl;
 
 import com.training.AngularSpring.exceptions.EmailRegisteredException;
 import com.training.AngularSpring.model.User;
-import com.training.AngularSpring.model.request.CreateUserRequestModel;
-import com.training.AngularSpring.model.request.UserRequestModel;
-import com.training.AngularSpring.model.response.UserResponseModel;
+import com.training.AngularSpring.model.request.CreateUserRequestModelDTO;
+import com.training.AngularSpring.model.request.UserRequestModelDTO;
+import com.training.AngularSpring.model.response.UserResponseModelDTO;
 import com.training.AngularSpring.repository.UserRepository;
 import com.training.AngularSpring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,35 +20,41 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserServiceImpl (UserRepository userRepository) {this.userRepository = userRepository;}
 
-    public UserResponseModel getUser(int userId) {
+    public UserResponseModelDTO getUser(int userId) {
         User currentUser = userRepository.findByUserId((userId));
 
-        if (currentUser != null) return new UserResponseModel(currentUser);
+        if (currentUser != null) return new UserResponseModelDTO(currentUser);
 
         return null;
     }
 
-    public List<UserResponseModel> getAllUsers() {
+    public List<UserResponseModelDTO> getAllUsers() {
         return userRepository.findAll()
                 .stream()
-                .map(UserResponseModel::new)
+                .map(UserResponseModelDTO::new)
                 .toList();
     }
 
-    public UserResponseModel createUser(CreateUserRequestModel user){
+    public UserResponseModelDTO createUser(CreateUserRequestModelDTO user){
         if (userRepository.existsByEmail(user.getEmail())) throw new EmailRegisteredException();
-
 
         User createdUser = userRepository.save(new User(user));
 
-        return new UserResponseModel(createdUser);
+        return new UserResponseModelDTO(createdUser);
     }
 
-    public UserResponseModel editUser(UserRequestModel user) {
-        return null;
+    public UserResponseModelDTO editUser(UserRequestModelDTO user) {
+        if (!userRepository.existsByUserId(user.getUserId())) return null;
+
+        User editedUser = userRepository.save(new User(user));
+
+        return new UserResponseModelDTO((editedUser));
     }
 
-    public boolean deleteUser(UserRequestModel user) {
-        return false;
+    public boolean deleteUser(int userId) {
+        if (!userRepository.existsByUserId(userId)) return false;
+
+        userRepository.deleteById(userId);
+        return true;
     }
 }

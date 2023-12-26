@@ -1,9 +1,9 @@
 package com.training.AngularSpring.controller;
 
-import com.training.AngularSpring.model.User;
-import com.training.AngularSpring.model.request.CreateUserRequestModel;
-import com.training.AngularSpring.model.request.UserRequestModel;
-import com.training.AngularSpring.model.response.UserResponseModel;
+import com.training.AngularSpring.exceptions.UserNotFoundException;
+import com.training.AngularSpring.model.request.CreateUserRequestModelDTO;
+import com.training.AngularSpring.model.request.UserRequestModelDTO;
+import com.training.AngularSpring.model.response.UserResponseModelDTO;
 import com.training.AngularSpring.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("users")
 public class UserController {
-    Map<Integer, User> users = new HashMap<>();
 
     private final UserService userService;
 
@@ -29,8 +26,8 @@ public class UserController {
 
     @GetMapping(path = "/{userId}",
             produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<UserResponseModel> getUser(@PathVariable int userId) {
-        UserResponseModel foundUser = userService.getUser(userId);
+    public ResponseEntity<UserResponseModelDTO> getUser(@PathVariable int userId) {
+        UserResponseModelDTO foundUser = userService.getUser(userId);
 
         if (foundUser == null) return ResponseEntity.notFound().build();
         return new ResponseEntity<>(foundUser, HttpStatus.OK);
@@ -40,7 +37,7 @@ public class UserController {
     public ResponseEntity<List<?>> getUser(@RequestParam(value = "page", defaultValue = "1") int page,
                                               @RequestParam(value = "limit", defaultValue = "20") int limit,
                                               @RequestParam(value = "order", defaultValue = "asc", required = false) String order) {
-        List<UserResponseModel> responseValue = userService.getAllUsers();
+        List<UserResponseModelDTO> responseValue = userService.getAllUsers();
         if (responseValue.isEmpty()) return ResponseEntity.noContent().build();
 
         return new ResponseEntity<>(responseValue, HttpStatus.OK);
@@ -48,8 +45,8 @@ public class UserController {
 
     @PostMapping(consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> createUser(@NonNull @Valid @RequestBody CreateUserRequestModel user) {
-        UserResponseModel responseValue = userService.createUser(user);
+    public ResponseEntity<?> createUser(@NonNull @Valid @RequestBody CreateUserRequestModelDTO user) {
+        UserResponseModelDTO responseValue = userService.createUser(user);
         return new ResponseEntity<>(responseValue, HttpStatus.CREATED);
     }
 
@@ -57,21 +54,20 @@ public class UserController {
             consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> editUser(@PathVariable int userId,
-                           @RequestBody UserRequestModel user) {
-        if (!users.containsKey(userId)) return new ResponseEntity<>("Usuário inexistente", HttpStatus.BAD_REQUEST);
-        User existentUser = users.get(userId);
-        existentUser.setName(user.getName());
+                           @RequestBody UserRequestModelDTO user) {
+        UserResponseModelDTO editedUser = userService.editUser(user);
 
+        if (editedUser == null) throw new UserNotFoundException();
 
-        UserResponseModel responseUser = new UserResponseModel(existentUser.getUserId(), existentUser.getName(),
-                existentUser.getEmail());
-        return new ResponseEntity<>(responseUser, HttpStatus.OK);
+        return new ResponseEntity<>(editedUser, HttpStatus.OK);
     }
 
     @DeleteMapping(path="/{userId}")
-    public ResponseEntity<?> deleteUser(@PathVariable String userId) {
-        if (!users.containsKey(userId)) return new ResponseEntity<>("Usuário inexistente", HttpStatus.BAD_REQUEST);
-        users.remove(userId);
+    public ResponseEntity<?> deleteUser(@PathVariable int userId) {
+        boolean isDeleted = userService.deleteUser(userId);
+
+        if (!isDeleted) throw new UserNotFoundException();
+
         return ResponseEntity.noContent().build();
     }
 }

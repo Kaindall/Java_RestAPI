@@ -6,23 +6,26 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-
-import java.lang.reflect.Field;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class UserResponseModel {
+public class UserResponseModelDTO {
     @NonNull private int userId;
     private String name;
     @Email(message = "Formatação de email invalida.")
     private String email;
 
-    public UserResponseModel(User user) {
+    public UserResponseModelDTO(User user) {
         this.userId = user.getUserId();
         this.name = user.getName();
         this.email = user.getEmail();
+    }
+
+    @Autowired
+    public User generateEntity (User user) {
+
     }
 }
 

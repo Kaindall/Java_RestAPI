@@ -63,8 +63,8 @@ public class AppExceptionsHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({ EmailRegisteredException.class })
-    public ResponseEntity<Object> handleCreateUserExceptions (EmailRegisteredException exception) {
+    @ExceptionHandler({ EmailRegisteredException.class, UserNotFoundException.class })
+    public ResponseEntity<Object> handleCreateUserExceptions (Exception exception) {
         ErrorModel error = new ErrorModel(new Date(), List.of(exception.getLocalizedMessage()));
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
