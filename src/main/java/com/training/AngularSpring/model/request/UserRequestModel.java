@@ -1,12 +1,13 @@
 package com.training.AngularSpring.model.request;
 
+import com.training.AngularSpring.model.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
 public class UserRequestModel {
-    private String userId;
+    private int userId;
     private String name;
     @Email(message = "Formatação de email invalida.")
     private String email;

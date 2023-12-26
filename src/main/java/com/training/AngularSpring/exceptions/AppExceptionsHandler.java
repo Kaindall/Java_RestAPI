@@ -1,7 +1,9 @@
 package com.training.AngularSpring.exceptions;
 
 import com.training.AngularSpring.model.response.ErrorModel;
+import jakarta.validation.constraints.Email;
 import org.apache.coyote.Response;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -11,10 +13,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,61 +21,46 @@ import java.util.stream.Collectors;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class AppExceptionsHandler {
-    @ExceptionHandler({ Exception.class })
-    public ResponseEntity<?> handleGenericException (Exception exception, WebRequest request) {
+    @ExceptionHandler({ HttpMessageNotReadableException.class, Exception.class })
+    public ResponseEntity<?> handleGenericException (Exception exception) {
         ErrorModel responseValue = new ErrorModel(new Date());
         String localizedMessage = exception.getLocalizedMessage();
 
         if (responseValue.getErrorDetails() == null) {
             if (localizedMessage.contains("problem:")) {
                 String errorKeyText = "problem: ";
-                responseValue.setErrorDetails(Arrays.asList(localizedMessage
+                responseValue.setErrorDetails(List.of(localizedMessage
                         .substring(localizedMessage.lastIndexOf(errorKeyText))
                         .replace(errorKeyText, "")));
 
             } else if (localizedMessage.contains("JSON parse error:")) {
                 String errorKeyText = "JSON parse error:";
-                responseValue.setErrorDetails(Arrays.asList(localizedMessage
+                responseValue.setErrorDetails(List.of(localizedMessage
                         .substring(localizedMessage.lastIndexOf(errorKeyText))
                         .replace(errorKeyText, "")));
             }
+        }
+        if (exception instanceof HttpMessageNotReadableException) {
+            return new ResponseEntity<>(responseValue, new HttpHeaders(), HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(responseValue, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler({ HttpMessageNotReadableException.class })
-    public ResponseEntity<?> handleHttpException (HttpMessageNotReadableException exception, WebRequest request) {
-        ErrorModel responseValue = new ErrorModel(new Date());
-        String localizedMessage = exception.getLocalizedMessage();
-
-        if (responseValue.getErrorDetails() == null) {
-            if (localizedMessage.contains("problem:")) {
-                String errorKeyText = "problem: ";
-                responseValue.setErrorDetails(Arrays.asList(localizedMessage
-                        .substring(localizedMessage.lastIndexOf(errorKeyText))
-                        .replace(errorKeyText, "")));
-
-            } else if (localizedMessage.contains("JSON parse error:")) {
-                String errorKeyText = "JSON parse error:";
-                responseValue.setErrorDetails(Arrays.asList(localizedMessage
-                        .substring(localizedMessage.lastIndexOf(errorKeyText))
-                        .replace(errorKeyText, "")));
-            }
-        }
-
-        return new ResponseEntity<>(responseValue, new HttpHeaders(), HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler({ MethodArgumentNotValidException.class })
-    public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,
-                                                               WebRequest request) {
+    public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception) {
         List<String> allErrors = exception.getBindingResult().getFieldErrors().stream()
-                .map(fieldWrong -> fieldWrong.getDefaultMessage())
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(Collectors.toList());
 
         ErrorModel error = new ErrorModel(new Date(), allErrors);
 
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({ EmailRegisteredException.class })
+    public ResponseEntity<Object> handleCreateUserExceptions (EmailRegisteredException exception) {
+        ErrorModel error = new ErrorModel(new Date(), List.of(exception.getLocalizedMessage()));
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }
