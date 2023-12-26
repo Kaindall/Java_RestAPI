@@ -14,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +45,11 @@ public class AppExceptionsHandler {
             return new ResponseEntity<>(responseValue, new HttpHeaders(), HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(responseValue, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+        if (responseValue.getErrorDetails() == null) responseValue.setErrorDetails(List.of(exception.getMessage()));
+
+        //substituir por registro em log
+        System.out.println(responseValue);
+        return ResponseEntity.internalServerError().build();
     }
 
     @ExceptionHandler({ MethodArgumentNotValidException.class })

@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     UserServiceImpl (UserRepository userRepository) {this.userRepository = userRepository;}
 
     public UserResponseModel getUser(int userId) {
-        User currentUser = userRepository.findById((userId));
+        User currentUser = userRepository.findByUserId((userId));
 
         if (currentUser != null) return new UserResponseModel(currentUser);
 
@@ -36,14 +36,10 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserResponseModel createUser(CreateUserRequestModel user){
-        List<User> users = userRepository.findAll();
+        if (userRepository.existsByEmail(user.getEmail())) throw new EmailRegisteredException();
 
-        if (users.stream()
-                .anyMatch(currentUser -> user.getEmail().equals(currentUser.getEmail()))) {
-            throw new EmailRegisteredException();
-        }
 
-        User createdUser = userRepository.save(user);
+        User createdUser = userRepository.save(new User(user));
 
         return new UserResponseModel(createdUser);
     }

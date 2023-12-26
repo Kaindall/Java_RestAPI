@@ -13,11 +13,11 @@ import java.util.List;
 public interface UserRepository extends CrudRepository<User, Integer> {
     List<User> findAll();
 
-    User findById(int id);
+    User findByUserId(int id);
+
+    boolean existsByEmail (String email);
 
     void delete(User user);
 
-    User save(UserRequestModel user);
-
-    User save(CreateUserRequestModel user);
+    User save(User user);
 }
