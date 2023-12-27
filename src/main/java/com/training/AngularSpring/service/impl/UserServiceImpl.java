@@ -46,7 +46,8 @@ public class UserServiceImpl implements UserService {
     public UserResponseModelDTO editUser(UserRequestModelDTO user) {
         if (!userRepository.existsByUserId(user.getUserId())) return null;
 
-        User editedUser = userRepository.save(new User(user));
+        User editedUser = User.builder().build();
+        userRepository.save(editedUser);
 
         return new UserResponseModelDTO((editedUser));
     }

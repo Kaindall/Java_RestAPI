@@ -7,13 +7,11 @@ import com.training.AngularSpring.model.response.UserResponseModelDTO;
 import java.util.List;
 
 public interface UserService {
-
     UserResponseModelDTO getUser(int userId);
 
     List<UserResponseModelDTO> getAllUsers();
 
     UserResponseModelDTO createUser(CreateUserRequestModelDTO user);
-
 
     UserResponseModelDTO editUser (UserRequestModelDTO user);
 

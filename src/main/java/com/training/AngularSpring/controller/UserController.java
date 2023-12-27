@@ -55,6 +55,7 @@ public class UserController {
             produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> editUser(@PathVariable int userId,
                            @RequestBody UserRequestModelDTO user) {
+        user.setUserId(userId);
         UserResponseModelDTO editedUser = userService.editUser(user);
 
         if (editedUser == null) throw new UserNotFoundException();
