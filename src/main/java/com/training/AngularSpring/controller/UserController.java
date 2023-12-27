@@ -1,9 +1,9 @@
 package com.training.AngularSpring.controller;
 
 import com.training.AngularSpring.exceptions.UserNotFoundException;
-import com.training.AngularSpring.model.request.CreateUserRequestModelDTO;
-import com.training.AngularSpring.model.request.UserRequestModelDTO;
-import com.training.AngularSpring.model.response.UserResponseModelDTO;
+import com.training.AngularSpring.model.requests.CreateUserRequestModelDTO;
+import com.training.AngularSpring.model.requests.UserRequestModelDTO;
+import com.training.AngularSpring.model.responses.UserResponseModelDTO;
 import com.training.AngularSpring.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,8 +55,7 @@ public class UserController {
             produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> editUser(@PathVariable int userId,
                            @RequestBody UserRequestModelDTO user) {
-        user.setUserId(userId);
-        UserResponseModelDTO editedUser = userService.editUser(user);
+        UserResponseModelDTO editedUser = userService.editUser(userId, user);
 
         if (editedUser == null) throw new UserNotFoundException();
 

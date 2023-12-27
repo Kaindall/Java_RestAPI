@@ -1,11 +1,13 @@
 package com.training.AngularSpring.service.impl;
 
 import com.training.AngularSpring.exceptions.EmailRegisteredException;
+import com.training.AngularSpring.exceptions.UserNotFoundException;
+import com.training.AngularSpring.mapper.UserMapper;
 import com.training.AngularSpring.model.User;
-import com.training.AngularSpring.model.request.CreateUserRequestModelDTO;
-import com.training.AngularSpring.model.request.UserRequestModelDTO;
-import com.training.AngularSpring.model.response.UserResponseModelDTO;
-import com.training.AngularSpring.repository.UserRepository;
+import com.training.AngularSpring.model.requests.CreateUserRequestModelDTO;
+import com.training.AngularSpring.model.requests.UserRequestModelDTO;
+import com.training.AngularSpring.model.responses.UserResponseModelDTO;
+import com.training.AngularSpring.repository.UserRepositoryDAO;
 import com.training.AngularSpring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,47 +17,46 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    UserRepository userRepository;
+    UserRepositoryDAO userRepositoryDAO;
+    UserMapper userMapper;
 
     @Autowired
-    UserServiceImpl (UserRepository userRepository) {this.userRepository = userRepository;}
+    UserServiceImpl (UserRepositoryDAO userRepositoryDAO, UserMapper userMapper) {
+        this.userRepositoryDAO = userRepositoryDAO;
+        this.userMapper = userMapper;
+    }
 
     public UserResponseModelDTO getUser(int userId) {
-        User currentUser = userRepository.findByUserId((userId));
+        User currentUser = userRepositoryDAO.findByUserId((userId));
 
-        if (currentUser != null) return new UserResponseModelDTO(currentUser);
+        if (currentUser != null) return userMapper.toUserResponseModel(currentUser);
 
         return null;
     }
 
     public List<UserResponseModelDTO> getAllUsers() {
-        return userRepository.findAll()
+        return userRepositoryDAO.findAll()
                 .stream()
-                .map(UserResponseModelDTO::new)
+                .map(userMapper::toUserResponseModel)
                 .toList();
     }
 
     public UserResponseModelDTO createUser(CreateUserRequestModelDTO user){
-        if (userRepository.existsByEmail(user.getEmail())) throw new EmailRegisteredException();
+        if (userRepositoryDAO.existsByEmail(user.getEmail())) throw new EmailRegisteredException();
 
-        User createdUser = userRepository.save(new User(user));
-
-        return new UserResponseModelDTO(createdUser);
+        return userMapper.toUserResponseModel(userRepositoryDAO.save(userMapper.toEntity(user)));
     }
 
-    public UserResponseModelDTO editUser(UserRequestModelDTO user) {
-        if (!userRepository.existsByUserId(user.getUserId())) return null;
+    public UserResponseModelDTO editUser(int userId, UserRequestModelDTO user) {
+        if (!userRepositoryDAO.existsByUserId(userId)) throw new UserNotFoundException();
 
-        User editedUser = User.builder().build();
-        userRepository.save(editedUser);
-
-        return new UserResponseModelDTO((editedUser));
+        return userMapper.toUserResponseModel(userRepositoryDAO.save(userMapper.toEntity(user)));
     }
 
     public boolean deleteUser(int userId) {
-        if (!userRepository.existsByUserId(userId)) return false;
+        if (!userRepositoryDAO.existsByUserId(userId)) return false;
 
-        userRepository.deleteById(userId);
+        userRepositoryDAO.deleteById(userId);
         return true;
     }
 }

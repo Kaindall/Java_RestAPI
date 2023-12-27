@@ -1,7 +1,5 @@
 package com.training.AngularSpring.model;
 
-import com.training.AngularSpring.model.request.CreateUserRequestModelDTO;
-import com.training.AngularSpring.model.request.UserRequestModelDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
@@ -30,17 +28,5 @@ public class User {
     @Column(length=30)
     @Size(min=6, message = "A senha precisa ter ao menos 6 caracteres.")
     private String password;
-
-    public User(CreateUserRequestModelDTO userRequestModel) {
-        this.name = userRequestModel.getName();
-        this.email = userRequestModel.getEmail();
-        this.password = userRequestModel.getPassword();
-    }
-
-    public User(UserRequestModelDTO userRequestModel) {
-        this.name = userRequestModel.getName();
-        this.email = userRequestModel.getEmail();
-        this.password = userRequestModel.getPassword();
-    }
 }
 

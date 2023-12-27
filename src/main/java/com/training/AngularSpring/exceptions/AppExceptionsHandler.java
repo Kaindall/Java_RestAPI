@@ -1,6 +1,6 @@
 package com.training.AngularSpring.exceptions;
 
-import com.training.AngularSpring.model.response.ErrorModel;
+import com.training.AngularSpring.model.responses.ErrorModel;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

@@ -1,4 +1,4 @@
-package com.training.AngularSpring.model.request;
+package com.training.AngularSpring.model.requests;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;

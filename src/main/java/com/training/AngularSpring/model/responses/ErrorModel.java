@@ -1,4 +1,4 @@
-package com.training.AngularSpring.model.response;
+package com.training.AngularSpring.model.responses;
 
 import lombok.*;
 

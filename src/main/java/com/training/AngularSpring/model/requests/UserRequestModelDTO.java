@@ -1,4 +1,4 @@
-package com.training.AngularSpring.model.request;
+package com.training.AngularSpring.model.requests;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class UserRequestModelDTO {
-    private int userId;
     private String name;
     @Email(message = "Formatação de email invalida.")
     private String email;

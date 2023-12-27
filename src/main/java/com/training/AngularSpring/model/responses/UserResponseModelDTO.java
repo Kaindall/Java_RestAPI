@@ -1,6 +1,5 @@
-package com.training.AngularSpring.model.response;
+package com.training.AngularSpring.model.responses;
 
-import com.training.AngularSpring.model.User;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,11 +14,5 @@ public class UserResponseModelDTO {
     private String name;
     @Email(message = "Formatação de email invalida.")
     private String email;
-
-    public UserResponseModelDTO(User user) {
-        this.userId = user.getUserId();
-        this.name = user.getName();
-        this.email = user.getEmail();
-    }
 }
 
