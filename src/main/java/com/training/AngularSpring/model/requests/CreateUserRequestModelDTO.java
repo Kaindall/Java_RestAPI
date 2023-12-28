@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 
 
 @Data
-@RequiredArgsConstructor
 public class CreateUserRequestModelDTO {
     @NonNull private String name;
     @NonNull @Email(message = "Formatação de email invalida.")

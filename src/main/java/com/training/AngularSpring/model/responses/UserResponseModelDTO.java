@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@RequiredArgsConstructor
 public class UserResponseModelDTO {
     @NonNull private Integer userId;
     private String name;
