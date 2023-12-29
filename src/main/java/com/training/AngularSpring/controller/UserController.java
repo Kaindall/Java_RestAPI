@@ -53,13 +53,12 @@ public class UserController {
     @PutMapping(path="/{userId}",
             consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> editUser(@PathVariable int userId,
+    public ResponseEntity<?> replaceUser(@PathVariable int userId,
                            @RequestBody UserRequestModelDTO user) {
-        UserResponseModelDTO editedUser = userService.editUser(userId, user);
+        user.setUserId(userId);
+        userService.replace(user);
 
-        if (editedUser == null) throw new UserNotFoundException();
-
-        return new ResponseEntity<>(editedUser, HttpStatus.OK);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(path="/{userId}")

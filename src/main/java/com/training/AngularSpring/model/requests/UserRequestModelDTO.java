@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class UserRequestModelDTO {
+    private Integer userId;
     private String name;
     @Email(message = "Formatação de email invalida.")
     private String email;

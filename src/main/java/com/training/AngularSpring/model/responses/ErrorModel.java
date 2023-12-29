@@ -11,4 +11,5 @@ import java.util.Date;
 public class ErrorModel {
     @NonNull private Date timestamp;
     private List<String> errorDetails;
+    private String developerMessage;
 }

@@ -3,7 +3,6 @@ package com.training.AngularSpring.service.impl;
 import com.training.AngularSpring.exceptions.EmailRegisteredException;
 import com.training.AngularSpring.exceptions.UserNotFoundException;
 import com.training.AngularSpring.mapper.UserMapper;
-import com.training.AngularSpring.model.User;
 import com.training.AngularSpring.model.requests.CreateUserRequestModelDTO;
 import com.training.AngularSpring.model.requests.UserRequestModelDTO;
 import com.training.AngularSpring.model.responses.UserResponseModelDTO;
@@ -27,11 +26,9 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserResponseModelDTO getUser(int userId) {
-        User currentUser = userRepositoryDAO.findByUserId((userId));
-
-        if (currentUser != null) return userMapper.toUserResponseModel(currentUser);
-
-        return null;
+        return userRepositoryDAO.findByUserId((userId))
+                .map(userMapper::toUserResponseModel)
+                .orElseThrow(UserNotFoundException::new);
     }
 
     public List<UserResponseModelDTO> getAllUsers() {
@@ -42,19 +39,27 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserResponseModelDTO createUser(CreateUserRequestModelDTO user){
-        if (userRepositoryDAO.existsByEmail(user.getEmail())) throw new EmailRegisteredException();
+        if (userRepositoryDAO.existsByEmail(user.getEmail())) throw new EmailRegisteredException("E-mail já registrado.");
 
         return userMapper.toUserResponseModel(userRepositoryDAO.save(userMapper.toEntity(user)));
     }
 
-    public UserResponseModelDTO editUser(int userId, UserRequestModelDTO user) {
-        if (!userRepositoryDAO.existsByUserId(userId)) throw new UserNotFoundException();
+    public UserResponseModelDTO editUser(UserRequestModelDTO user) {
+        return null;
+    }
 
-        return userMapper.toUserResponseModel(userRepositoryDAO.save(userMapper.toEntity(user)));
+    public boolean replace(UserRequestModelDTO user) {
+        return userRepositoryDAO.findByUserId(user.getUserId())
+                .map(currentUser -> {
+                    userRepositoryDAO.delete(currentUser);
+                    userRepositoryDAO.save(userMapper.toEntity(user));
+                    return true;
+                })
+                .orElseThrow(UserNotFoundException::new);
     }
 
     public boolean deleteUser(int userId) {
-        if (!userRepositoryDAO.existsByUserId(userId)) return false;
+        if (!userRepositoryDAO.existsByUserId(userId)) throw new UserNotFoundException();
 
         userRepositoryDAO.deleteById(userId);
         return true;

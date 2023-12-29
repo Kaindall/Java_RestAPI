@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class AppExceptionsHandler {
     @ExceptionHandler({ HttpMessageNotReadableException.class, Exception.class })
-    public ResponseEntity<?> handleGenericException (Exception exception) {
+    public ResponseEntity<?> handleGenericExceptions(Exception exception) {
         ErrorModel responseValue = new ErrorModel(new Date());
         String localizedMessage = exception.getLocalizedMessage();
 
@@ -50,19 +50,27 @@ public class AppExceptionsHandler {
     }
 
     @ExceptionHandler({ MethodArgumentNotValidException.class })
-    public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception) {
+    public ResponseEntity<Object> handleMethodsValidationExceptions(MethodArgumentNotValidException exception) {
         List<String> allErrors = exception.getBindingResult().getFieldErrors().stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(Collectors.toList());
 
-        ErrorModel error = new ErrorModel(new Date(), allErrors);
+        ErrorModel error = new ErrorModel(new Date(), allErrors, exception.getClass().getName());
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({ EmailRegisteredException.class, UserNotFoundException.class })
-    public ResponseEntity<Object> handleCreateUserExceptions (Exception exception) {
-        ErrorModel error = new ErrorModel(new Date(), List.of(exception.getLocalizedMessage()));
+    @ExceptionHandler({ EmailRegisteredException.class })
+    public ResponseEntity<Object> handleCreateUserExceptions(EmailRegisteredException exception) {
+        ErrorModel error = new ErrorModel(new Date(), List.of(exception.getLocalizedMessage()),
+                exception.getClass().getName());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({ UserNotFoundException.class })
+    public ResponseEntity<Object> handleFindUserExceptions(UserNotFoundException exception) {
+        ErrorModel error = new ErrorModel(new Date(), List.of(exception.getLocalizedMessage()),
+                exception.getClass().getName());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }

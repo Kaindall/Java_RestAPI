@@ -13,7 +13,9 @@ public interface UserService {
 
     UserResponseModelDTO createUser(CreateUserRequestModelDTO user);
 
-    UserResponseModelDTO editUser (int userId, UserRequestModelDTO user);
+    UserResponseModelDTO editUser (UserRequestModelDTO user);
+
+    boolean replace(UserRequestModelDTO user);
 
     boolean deleteUser (int user);
 }
