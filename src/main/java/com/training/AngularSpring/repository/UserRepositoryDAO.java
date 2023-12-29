@@ -6,19 +6,16 @@ import com.training.AngularSpring.model.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
 public interface UserRepositoryDAO extends JpaRepository<User, Integer> {
-    List<User> findAll();
+    Optional<User> findByUserId(int id);
 
-    User findByUserId(int id);
+    Optional<User> findByEmail(String email);
 
     boolean existsByEmail(String email);
 
     boolean existsByUserId(int id);
-
-    void delete(User user);
-
-    User save(User user);
 }

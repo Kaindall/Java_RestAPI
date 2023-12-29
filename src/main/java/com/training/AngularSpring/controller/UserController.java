@@ -56,9 +56,16 @@ public class UserController {
             produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> editUser(@PathVariable int userId,
                            @RequestBody GenericUserRequestModelDTO user) {
-        UserResponseModelDTO editedUser = userService.editUser(userId, user);
-
+        user.setUserId(userId);
+        UserResponseModelDTO editedUser = userService.editUser(user);
         return new ResponseEntity<>(editedUser, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> replaceUser(@PathVariable int userId, @RequestBody GenericUserRequestModelDTO user) {
+        user.setUserId(userId);
+        userService.replace(user);
+
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(path="/{userId}")
