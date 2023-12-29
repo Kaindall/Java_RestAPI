@@ -2,7 +2,7 @@ package com.training.AngularSpring.controller;
 
 import com.training.AngularSpring.exceptions.UserNotFoundException;
 import com.training.AngularSpring.model.requests.CreateUserRequestModelDTO;
-import com.training.AngularSpring.model.requests.UserRequestModelDTO;
+import com.training.AngularSpring.model.requests.GenericUserRequestModelDTO;
 import com.training.AngularSpring.model.responses.UserResponseModelDTO;
 import com.training.AngularSpring.service.UserService;
 import jakarta.validation.Valid;
@@ -50,14 +50,13 @@ public class UserController {
         return new ResponseEntity<>(responseValue, HttpStatus.CREATED);
     }
 
+    //está criando novo usuário, editar
     @PutMapping(path="/{userId}",
             consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> editUser(@PathVariable int userId,
-                           @RequestBody UserRequestModelDTO user) {
+                           @RequestBody GenericUserRequestModelDTO user) {
         UserResponseModelDTO editedUser = userService.editUser(userId, user);
-
-        if (editedUser == null) throw new UserNotFoundException();
 
         return new ResponseEntity<>(editedUser, HttpStatus.OK);
     }

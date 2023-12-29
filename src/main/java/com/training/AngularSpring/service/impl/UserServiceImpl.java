@@ -5,7 +5,7 @@ import com.training.AngularSpring.exceptions.UserNotFoundException;
 import com.training.AngularSpring.mapper.UserMapper;
 import com.training.AngularSpring.model.User;
 import com.training.AngularSpring.model.requests.CreateUserRequestModelDTO;
-import com.training.AngularSpring.model.requests.UserRequestModelDTO;
+import com.training.AngularSpring.model.requests.GenericUserRequestModelDTO;
 import com.training.AngularSpring.model.responses.UserResponseModelDTO;
 import com.training.AngularSpring.repository.UserRepositoryDAO;
 import com.training.AngularSpring.service.UserService;
@@ -47,7 +47,8 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserResponseModel(userRepositoryDAO.save(userMapper.toEntity(user)));
     }
 
-    public UserResponseModelDTO editUser(int userId, UserRequestModelDTO user) {
+    //está criando novo usuário, editar
+    public UserResponseModelDTO editUser(int userId, GenericUserRequestModelDTO user) {
         if (!userRepositoryDAO.existsByUserId(userId)) throw new UserNotFoundException();
 
         return userMapper.toUserResponseModel(userRepositoryDAO.save(userMapper.toEntity(user)));
