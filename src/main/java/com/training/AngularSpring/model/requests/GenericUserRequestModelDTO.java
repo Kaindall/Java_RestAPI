@@ -12,5 +12,4 @@ public class GenericUserRequestModelDTO {
     private String email;
     @Size(min=6, message = "A senha precisa ter ao menos 6 caracteres.")
     private String password;
-
 }

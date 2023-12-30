@@ -2,6 +2,7 @@ package com.training.AngularSpring.service;
 
 import com.training.AngularSpring.model.requests.CreateUserRequestModelDTO;
 import com.training.AngularSpring.model.requests.GenericUserRequestModelDTO;
+import com.training.AngularSpring.model.requests.UpdateUserRequestModelDTO;
 import com.training.AngularSpring.model.responses.UserResponseModelDTO;
 
 import java.util.List;
@@ -13,9 +14,11 @@ public interface UserService {
 
     UserResponseModelDTO createUser(CreateUserRequestModelDTO user);
 
-    UserResponseModelDTO editUser (GenericUserRequestModelDTO user);
+    List<UserResponseModelDTO> createAllUsers(List<CreateUserRequestModelDTO> users);
 
-    boolean replace(GenericUserRequestModelDTO user);
+    UserResponseModelDTO editUser (UpdateUserRequestModelDTO user);
+
+    boolean replace(int userId, CreateUserRequestModelDTO user);
 
     boolean deleteUser (int user);
 }

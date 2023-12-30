@@ -3,16 +3,22 @@ package com.training.AngularSpring.model.requests;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import java.util.Optional;
-
 @Data
+@NoArgsConstructor
 public class UpdateUserRequestModelDTO {
-    @NonNull private Optional<Integer> userId;
-    private Optional<String> name;
+    @NonNull private Integer userId;
+    private String name;
     @Email(message = "Formatação de email invalida.")
-    private Optional<String> email;
+    private String email;
     @Size(min=6, message = "A senha precisa ter ao menos 6 caracteres.")
-    private Optional<String> password;
+    private String password;
+
+    public boolean isNamePresent() {return this.name != null;}
+
+    public boolean isEmailPresent() {return this.email != null;}
+
+    public boolean isPasswordPresent(){return this.password != null;}
 }

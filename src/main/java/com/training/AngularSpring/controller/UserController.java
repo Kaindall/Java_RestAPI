@@ -2,7 +2,7 @@ package com.training.AngularSpring.controller;
 
 import com.training.AngularSpring.exceptions.UserNotFoundException;
 import com.training.AngularSpring.model.requests.CreateUserRequestModelDTO;
-import com.training.AngularSpring.model.requests.GenericUserRequestModelDTO;
+import com.training.AngularSpring.model.requests.UpdateUserRequestModelDTO;
 import com.training.AngularSpring.model.responses.UserResponseModelDTO;
 import com.training.AngularSpring.service.UserService;
 import jakarta.validation.Valid;
@@ -50,20 +50,28 @@ public class UserController {
         return new ResponseEntity<>(responseValue, HttpStatus.CREATED);
     }
 
-    //está criando novo usuário, editar
-    @PutMapping(path="/{userId}",
+    @PostMapping(path="/batch",
+            consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> createAllUsers(@NonNull @Valid @RequestBody List<CreateUserRequestModelDTO> users) {
+        List<UserResponseModelDTO> responseValue = userService.createAllUsers(users);
+        return new ResponseEntity<>(responseValue, HttpStatus.CREATED);
+    }
+
+    @PatchMapping(path="/{userId}",
             consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> editUser(@PathVariable int userId,
-                           @RequestBody GenericUserRequestModelDTO user) {
+                           @NonNull @Valid @RequestBody UpdateUserRequestModelDTO user) {
         user.setUserId(userId);
-        UserResponseModelDTO editedUser = userService.editUser(user);
-        return new ResponseEntity<>(editedUser, HttpStatus.OK);
+        UserResponseModelDTO responseValue = userService.editUser(user);
+        return new ResponseEntity<>(responseValue, HttpStatus.OK);
     }
 
-    public ResponseEntity<?> replaceUser(@PathVariable int userId, @RequestBody GenericUserRequestModelDTO user) {
-        user.setUserId(userId);
-        userService.replace(user);
+    @PutMapping(path="/{userId}")
+    public ResponseEntity<?> replaceUser(@PathVariable int userId,
+                                         @NonNull @Valid @RequestBody CreateUserRequestModelDTO user) {
+        userService.replace(userId, user);
 
         return ResponseEntity.noContent().build();
     }
