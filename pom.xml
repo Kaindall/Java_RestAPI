@@ -17,7 +17,7 @@
         <java.version>17</java.version>
     </properties>
     <dependencies>
-        <!-- CONVERSOR PARA TIPOS XML E JSON -->
+        <!-- XML and JSON data parsers -->
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
@@ -48,23 +48,15 @@
             <scope>test</scope>
         </dependency>
 
-        <!--BANCOS DE DADOS
-         MySQL to personal computer development (doesn't support SQLServer) -->
+        <!-- SGBD -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <version>8.2.0</version>
             <scope>runtime</scope>
         </dependency>
-        <!-- SQLServer to work computer development
-        <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-            <version>6.1.0.jre8</version>
-        </dependency>
-         -->
 
-        <!-- ANOTAÇÕES DE FACILITAÇÃO -->
+        <!-- Annotations Libraries -->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
