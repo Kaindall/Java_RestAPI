@@ -1,8 +1,8 @@
 package com.training.AngularSpring.service.impl;
 
-import com.training.AngularSpring.exceptions.EmailRegisteredException;
-import com.training.AngularSpring.exceptions.UserNotFoundException;
-import com.training.AngularSpring.mapper.UserMapper;
+import com.training.AngularSpring.model.exceptions.EmailRegisteredException;
+import com.training.AngularSpring.model.exceptions.UserNotFoundException;
+import com.training.AngularSpring.model.mapper.UserMapper;
 import com.training.AngularSpring.model.requests.CreateUserRequestModelDTO;
 import com.training.AngularSpring.model.requests.GenericUserRequestModelDTO;
 import com.training.AngularSpring.model.requests.UpdateUserRequestModelDTO;

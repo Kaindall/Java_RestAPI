@@ -1,4 +1,4 @@
-package com.training.AngularSpring.mapper;
+package com.training.AngularSpring.model.mapper;
 
 import com.training.AngularSpring.model.requests.CreateUserRequestModelDTO;
 import com.training.AngularSpring.model.requests.GenericUserRequestModelDTO;

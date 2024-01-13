@@ -1,4 +1,4 @@
-package com.training.AngularSpring.exceptions;
+package com.training.AngularSpring.model.exceptions;
 
 import com.training.AngularSpring.model.responses.ErrorModel;
 import org.springframework.context.support.DefaultMessageSourceResolvable;

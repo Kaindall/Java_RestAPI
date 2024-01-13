@@ -1,4 +1,4 @@
-package com.training.AngularSpring.exceptions;
+package com.training.AngularSpring.model.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

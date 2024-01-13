@@ -1,6 +1,6 @@
 package com.training.AngularSpring.controller;
 
-import com.training.AngularSpring.exceptions.UserNotFoundException;
+import com.training.AngularSpring.model.exceptions.UserNotFoundException;
 import com.training.AngularSpring.model.requests.CreateUserRequestModelDTO;
 import com.training.AngularSpring.model.requests.UpdateUserRequestModelDTO;
 import com.training.AngularSpring.model.responses.UserResponseModelDTO;
