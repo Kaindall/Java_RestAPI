@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.training</groupId>
-    <artifactId>AngularSpring</artifactId>
+    <artifactId>Users API</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>AngularSpring</name>
+    <name>Users API</name>
     <description>Project to train Spring REST Api</description>
     <properties>
         <java.version>17</java.version>
