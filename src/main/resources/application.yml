@@ -1,16 +1,6 @@
 server:
   port: 8002
 
-eureka:
-  instance:
-    prefer-ip-address: true
-    hostname: localhost
-  client:
-    service-url:
-      defaultZone: http://${eureka.instance.hostname}:8001/eureka/
-    fetch-registry: true
-    register-with-eureka: true
-
 management:
   endpoints:
     web:
@@ -34,7 +24,7 @@ spring:
   jmx:
     enabled: false
   datasource:
-    url: jdbc:mysql://192.168.99.100:3301/users?useTimezone=true&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: root
+    url: jdbc:mysql://localhost:3306/users?useTimezone=true&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: main
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
