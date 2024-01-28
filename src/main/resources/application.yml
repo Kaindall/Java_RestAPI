@@ -1,9 +1,26 @@
 server:
-  port: 8001
+  port: 8002
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8001/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    enabled-by-default: true
 
 spring:
   application:
-    name: Java_RestAPI
+    name: app-users
   devtools:
     restart:
       enabled: true
